@@ -19,10 +19,12 @@ class ScanResultVC: UIViewController, CLLocationManagerDelegate {
     var theProduct: ProductScanned?
     var theTextLabel: String?
     var theCountryLabel: String?
+    var allergentList:[String] = ["nut"]
     @IBOutlet weak var productName: UILabel!
     @IBOutlet weak var productCountry: UILabel!
     @IBOutlet weak var theLocation: UILabel!
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var allergentResult: UITextField!
     
     /*let theManager = CLLocationManager()
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -58,6 +60,7 @@ class ScanResultVC: UIViewController, CLLocationManagerDelegate {
                     DispatchQueue.main.async {
                         self.productName.text = webDescription.product.product_name
                         self.productCountry.text = webDescription.product.countries
+                        self.allergentResult.text = self.allergentlistcheck(ingredient: webDescription.product.ingredients_text_with_allergens!, allergents: self.allergentList)
                         self.imageView.image = UIImage(data: data)
                     }
                     }.resume()
@@ -73,6 +76,70 @@ class ScanResultVC: UIViewController, CLLocationManagerDelegate {
             }
             }.resume()
     }
+    
+    
+    func allergentlistcheck( ingredient: String, allergents:[String]) -> String{
+        var result:String = ""
+        for stringx in allergents{
+            if booleansearchallergentEng(ingredients: ingredient, allergent: stringx){
+                result = "contains " + stringx + "\n" + result
+            }
+        }
+        if (result == ""){
+            result = "No allergent source found"
+        }
+        return result
+    }
+    
+    
+    
+    //method for check allergent contents
+    func booleansearchallergentEng( ingredients: String, allergent:String) -> Bool {
+        let ingredientArr = ingredients.components(separatedBy: [":", ",", " "])
+        
+        for (Stringx) in ingredientArr{
+            if (Stringx == allergent){
+                return true
+            }
+            
+        }
+        
+        return false
+        
+    }
+    func booleansearchallergent( ingredients: String, allergent: String, language: String) -> Bool{
+        let ingredientArr = ingredients.components(separatedBy: [":", ",", " "])
+        let keyword: [String] = translate(allergent: allergent, Languagename: language)
+        for (Stringx) in ingredientArr{
+            for (Stringy) in keyword{
+                if (Stringx == Stringy){
+                    return true
+                }
+                
+            }
+        }
+        return false
+    }
+    
+    //inner method of above
+    func translate(allergent: String, Languagename: String) -> [String]{
+        if (Languagename == "French")&&(allergent == "peanut"){
+            return ["",""]
+            
+        }
+        else if (Languagename == "French") && (allergent == "diary"){
+            return ["",""]
+        }
+        else if (Languagename == "German") && (allergent == "peanut"){
+            return ["",""]
+        }
+        else if (Languagename == "German") && (allergent == "diary"){
+            return["",""]
+        }
+        return [""]
+    }
+    
+    
 
 
 }

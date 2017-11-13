@@ -156,11 +156,19 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="asr-Yv-4B3">
+                                <rect key="frame" x="0.0" y="465" width="194" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="0lN-aN-njH"/>
                     </view>
                     <connections>
+                        <outlet property="allergentResult" destination="asr-Yv-4B3" id="dMk-xH-sme"/>
                         <outlet property="imageView" destination="3lD-IB-U7U" id="kJI-Ij-6Pw"/>
                         <outlet property="productCountry" destination="bcl-Tc-0Ki" id="UIG-tb-MYA"/>
                         <outlet property="productName" destination="uFa-OK-wbq" id="QKv-6T-S9r"/>
