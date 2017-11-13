@@ -19,7 +19,8 @@ class ScanResultVC: UIViewController, CLLocationManagerDelegate {
     var theProduct: ProductScanned?
     var theTextLabel: String?
     var theCountryLabel: String?
-    var allergentList:[String] = ["nut"]
+    var allergentList:[String] = ["peanut","nut","treenut"]
+    var productIngrediants: String?
     @IBOutlet weak var productName: UILabel!
     @IBOutlet weak var productCountry: UILabel!
     @IBOutlet weak var theLocation: UILabel!
@@ -60,7 +61,12 @@ class ScanResultVC: UIViewController, CLLocationManagerDelegate {
                     DispatchQueue.main.async {
                         self.productName.text = webDescription.product.product_name
                         self.productCountry.text = webDescription.product.countries
-                        self.allergentResult.text = self.allergentlistcheck(ingredient: webDescription.product.ingredients_text_with_allergens!, allergents: self.allergentList)
+                        
+                        if webDescription.product.ingredients_text_with_allergens != nil {
+                            self.productIngrediants = webDescription.product.ingredients_text_with_allergens
+                            self.allergentResult.text = self.allergentlistcheck(ingredient: self.productIngrediants!, allergents: self.allergentList)
+                        }
+                        
                         self.imageView.image = UIImage(data: data)
                     }
                     }.resume()
@@ -68,6 +74,12 @@ class ScanResultVC: UIViewController, CLLocationManagerDelegate {
                     DispatchQueue.main.async {
                         self.productName.text = webDescription.product.product_name
                         self.productCountry.text = webDescription.product.countries
+                        
+                        //same chunk
+                        if webDescription.product.ingredients_text_with_allergens != nil {
+                            self.productIngrediants = webDescription.product.ingredients_text_with_allergens
+                            self.allergentResult.text = self.allergentlistcheck(ingredient: self.productIngrediants!, allergents: self.allergentList)
+                        }
                     }
                 }
             } catch let jsonErr {
@@ -91,21 +103,15 @@ class ScanResultVC: UIViewController, CLLocationManagerDelegate {
         return result
     }
     
-    
-    
     //method for check allergent contents
     func booleansearchallergentEng( ingredients: String, allergent:String) -> Bool {
         let ingredientArr = ingredients.components(separatedBy: [":", ",", " "])
-        
         for (Stringx) in ingredientArr{
             if (Stringx == allergent){
                 return true
             }
-            
         }
-        
         return false
-        
     }
     func booleansearchallergent( ingredients: String, allergent: String, language: String) -> Bool{
         let ingredientArr = ingredients.components(separatedBy: [":", ",", " "])
@@ -115,7 +121,6 @@ class ScanResultVC: UIViewController, CLLocationManagerDelegate {
                 if (Stringx == Stringy){
                     return true
                 }
-                
             }
         }
         return false
@@ -124,17 +129,16 @@ class ScanResultVC: UIViewController, CLLocationManagerDelegate {
     //inner method of above
     func translate(allergent: String, Languagename: String) -> [String]{
         if (Languagename == "French")&&(allergent == "peanut"){
-            return ["",""]
-            
+            return ["cacahuète","arachide"]
         }
         else if (Languagename == "French") && (allergent == "diary"){
-            return ["",""]
+            return ["lait","laitier","crémerie"]
         }
         else if (Languagename == "German") && (allergent == "peanut"){
-            return ["",""]
+            return ["Erdnuss","Nuss" ]
         }
         else if (Languagename == "German") && (allergent == "diary"){
-            return["",""]
+            return["Milch","Molkerei"]
         }
         return [""]
     }
